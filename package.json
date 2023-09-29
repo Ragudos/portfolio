@@ -1,0 +1,39 @@
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "description": "My portfolio website",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier -w \"**/*.{ts,tsx,js,jsx}\" && pnpm run type-check && pnpm run lint:fix",
+    "prepare": "husky install"
+  },
+  "keywords": [
+    "portfolio"
+  ],
+  "author": "Aaron",
+  "license": "MIT",
+  "workspaces": [
+    "./packages/portfolio"
+  ],
+  "devDependencies": {
+    "@portfolio/eslint-config": "file:./packages/portfolio-eslint-config",
+    "@portfolio/prettier-config": "file:./packages/portfolio-prettier-config",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.7.3",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.0",
+    "eslint-plugin-astro": "^0.29.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.3",
+    "typescript": "*"
+  }
+}
