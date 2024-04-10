@@ -20,9 +20,12 @@
 	--radius: 0.5rem;
 
 	--transition-property-colors: background-color, color, opacity, box-shadow;
-	--transition-colors: background-color var(--animation-duration) ease, color var(--animation-duration) ease,
-		opacity var(--animation-duration) ease, box-shadow var(--animation-duration) ease;
-	--transition-visibility: visibility var(--animation-duration) ease, opacity var(--animation-duration) ease;
+	--transition-colors: background-color var(--animation-duration) ease,
+		color var(--animation-duration) ease,
+		opacity var(--animation-duration) ease,
+		box-shadow var(--animation-duration) ease;
+	--transition-visibility: visibility var(--animation-duration) ease,
+		opacity var(--animation-duration) ease;
 }
 
 [data-theme="dark"] {

@@ -12,12 +12,19 @@ const links = siteConfig.navigationLinks;
 				<ul>
 					{
 						links.map((link) => {
+							const isCurrentPage =
+								Astro.url.pathname === link.url;
+
 							return (
 								<li>
 									<a
 										title={link.title}
+										aria-label={link.title}
 										href={link.url}
 										data-astro-prefetch
+										aria-current={
+											isCurrentPage ? "page" : undefined
+										}
 									>
 										{link.name}
 									</a>
@@ -48,12 +55,21 @@ const links = siteConfig.navigationLinks;
 					<ul>
 						{
 							links.map((link) => {
+								const isCurrentPage =
+									Astro.url.pathname === link.url;
+
 								return (
 									<li>
 										<a
 											title={link.title}
+											aria-label={link.title}
 											href={link.url}
 											data-astro-prefetch
+											aria-current={
+												isCurrentPage
+													? "page"
+													: undefined
+											}
 										>
 											{link.name}
 										</a>
@@ -67,54 +83,147 @@ const links = siteConfig.navigationLinks;
 			<script>
 				import { batchListeners } from "@/lib/utils";
 
-				const mobileNavToggleBtn = document.querySelector(
-					".mobile-nav-toggle-btn",
-				);
-				const darkOverlay = document.querySelector(
-					".mobile-nav-dark-overlay",
-				);
-
-				if (
-					!mobileNavToggleBtn ||
-					!(mobileNavToggleBtn instanceof HTMLButtonElement)
-				) {
-					throw new Error(
-						"[MobileNavigation] mobileNavToggleBtn is not found or not an instance of HTMLButtonElement",
+				const getTogglers = (): [HTMLButtonElement, HTMLElement] => {
+					const mobileNavToggleBtn = document.querySelector(
+						".mobile-nav-toggle-btn",
 					);
-				}
-
-				if (!darkOverlay || !(darkOverlay instanceof HTMLElement)) {
-					throw new Error(
-						"[MobileNavigation] darkOverlay is not found or not an instance of HTMLElement",
+					const darkOverlay = document.querySelector(
+						".mobile-nav-dark-overlay",
 					);
-				}
+
+					if (
+						!mobileNavToggleBtn ||
+						!(mobileNavToggleBtn instanceof HTMLButtonElement)
+					) {
+						throw new Error(
+							"[MobileNavigation] mobileNavToggleBtn is not found or not an instance of HTMLButtonElement",
+						);
+					}
+
+					if (!darkOverlay || !(darkOverlay instanceof HTMLElement)) {
+						throw new Error(
+							"[MobileNavigation] darkOverlay is not found or not an instance of HTMLElement",
+						);
+					}
+
+					return [mobileNavToggleBtn, darkOverlay];
+				};
+
+				const [mobileNavToggleBtn, darkOverlay] = getTogglers();
+
+				const onMediaChange = (evt: MediaQueryListEvent) => {
+					if (evt.matches) {
+						document.body.classList.remove(
+							"mobile-nav-open",
+							"lock-scroll",
+						);
+					}
+				};
+				const onMobileNavToggleBtnClick = (
+					mobileNavToggleBtn: HTMLButtonElement,
+				) => {
+					return () => {
+						if (
+							mobileNavToggleBtn.getAttribute("aria-expanded") ===
+							"true"
+						) {
+							mobileNavToggleBtn.setAttribute(
+								"aria-expanded",
+								"false",
+							);
+							document.body.classList.remove(
+								"mobile-nav-open",
+								"lock-scroll",
+							);
+						} else {
+							mobileNavToggleBtn.setAttribute(
+								"aria-expanded",
+								"true",
+							);
+							document.body.classList.add(
+								"mobile-nav-open",
+								"lock-scroll",
+							);
+						}
+					};
+				};
+				const onDarkOverlayClick = () => {
+					document.body.classList.remove(
+						"mobile-nav-open",
+						"lock-scroll",
+					);
+				};
+
+				const media = window.matchMedia("(min-width: 950px)");
+
+				media.addEventListener("change", onMediaChange);
 
 				batchListeners("click", [
 					{
 						element: mobileNavToggleBtn,
-						callback: () => {
-                            if (mobileNavToggleBtn.getAttribute("aria-expanded") === "true") {
-                                mobileNavToggleBtn.setAttribute("aria-expanded", "false");
-                                document.body.classList.remove("mobile-nav-open", "lock-scroll");
-                            } else {
-                                mobileNavToggleBtn.setAttribute("aria-expanded", "true");
-                                document.body.classList.add("mobile-nav-open", "lock-scroll");
-                            }
-						},
+						callback: onMobileNavToggleBtnClick(mobileNavToggleBtn),
 					},
 					{
 						element: darkOverlay,
-						callback: () => {
-							document.body.classList.remove("mobile-nav-open", "lock-scroll");
-						},
+						callback: onDarkOverlayClick,
 					},
 				]);
 
-                window.matchMedia("(min-width: 950px)").addEventListener("change", (evt) => {
-                    if (evt.matches) {
-                        document.body.classList.remove("mobile-nav-open", "lock-scroll");
-                    }
-                });
+				let mobileBtnListener =
+					onMobileNavToggleBtnClick(mobileNavToggleBtn);
+
+				document.addEventListener("astro:before-preparation", () => {
+					const [mobileNavToggleBtn, darkOverlay] = getTogglers();
+
+					document.body.classList.remove(
+						"mobile-nav-open",
+						"lock-scroll",
+					);
+
+					const header = document.querySelector(
+						".main-header-wrapper",
+					);
+
+					if (!header || !(header instanceof HTMLElement)) {
+						throw new Error(
+							"[MobileNavigation] header is not found",
+						);
+					}
+
+					header.style.setProperty("--animation-duration", "0s");
+
+					mobileNavToggleBtn.removeEventListener(
+						"click",
+						mobileBtnListener,
+					);
+
+					darkOverlay.removeEventListener(
+						"click",
+						onDarkOverlayClick,
+					);
+
+					media.removeEventListener("change", onMediaChange);
+				});
+
+				document.addEventListener("astro:after-swap", () => {
+					const [mobileNavToggleBtn, darkOverlay] = getTogglers();
+
+					mobileBtnListener =
+						onMobileNavToggleBtnClick(mobileNavToggleBtn);
+
+					media.addEventListener("change", onMediaChange);
+
+					batchListeners("click", [
+						{
+							element: mobileNavToggleBtn,
+							callback: mobileBtnListener,
+						},
+						{
+							element: darkOverlay,
+							callback: onDarkOverlayClick,
+						},
+					]);
+				});
 			</script>
 			<a
 				class="font-brand h5 logo"
@@ -156,8 +265,23 @@ const links = siteConfig.navigationLinks;
 			opacity: 1;
 		}
 
-		.mobile-navbar-wrapper ul li a {
-			transform: translate3d(0, 0, 0);
+		.mobile-navbar-wrapper ul {
+			li {
+				transform: translate3d(0, 0, 0);
+
+				@for $i from 1 through 4 {
+					&:nth-child(#{$i}) {
+						a {
+							transition-delay: calc(
+								var(--animation-duration, 250ms) *
+									1.25 *
+									#{$i /
+									2}
+							);
+						}
+					}
+				}
+			}
 		}
 
 		.mobile-nav-toggle-btn span {
@@ -337,14 +461,6 @@ const links = siteConfig.navigationLinks;
 				will-change: transform, opacity, visibility;
 				transition-duration: var(--animation-duration, 250ms);
 				transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-			}
-
-			li {
-				@for $i from 2 through 4 {
-					&:nth-child(#{$i}) {
-						transition-delay: calc(250ms * (#{$i - 1} / 2));
-					}
-				}
 			}
 		}
 	}
