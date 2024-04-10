@@ -1,0 +1,6 @@
+@use "./mixins/sizes.scss" as *;
+
+@import "./components/global/resets.scss";
+@import "./components/global/root.scss";
+@import "./components/global/typography.scss";
+@import "./components/global/buttons.scss";

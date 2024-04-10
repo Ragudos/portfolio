@@ -1,0 +1,80 @@
+.marquee-container {
+	--_visibility-duration: var(--animation-duration, 250ms);
+	--_grid-gap: 1.5rem;
+
+	transition-property: opacity, visibility;
+	transition-duration: var(--_visibility-duration);
+	transition-timing-function: ease-in-out;
+
+	opacity: 0;
+	visibility: hidden;
+
+	@include s-tablet {
+		--_grid-gap: 2rem;
+	}
+}
+
+.marquee-container[data-isloading="false"] {
+	opacity: 1;
+	visibility: visible;
+}
+
+.marquee-grid {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: var(--_grid-gap, 2rem);
+}
+
+.marquee-container[data-animate="true"]:not([data-isloading="true"]) {
+	position: relative;
+	padding-block: 3rem;
+
+	overflow: hidden;
+
+	mask: linear-gradient(
+		90deg,
+		transparent,
+		hsl(var(--clr-background)) 20%,
+		hsl(var(--clr-background)) 80%,
+		transparent
+	);
+
+	margin: 0 auto;
+
+	.marquee-track {
+		width: fit-content;
+		animation: marquee-mobile
+			calc(var(--marquee-speed, 3000ms) * (var(--_children-count, 6) * 2))
+			linear infinite;
+
+		@include s-desktop {
+			animation-name: marquee-desktop;
+		}
+
+		.marquee-grid {
+			flex-wrap: nowrap;
+			width: fit-content;
+
+			gap: var(--_grid-gap, 1rem);
+		}
+	}
+}
+
+@keyframes marquee-mobile {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(calc(-50% - (var(--_grid-gap) / 2)), 0, 0);
+	}
+}
+
+@keyframes marquee-desktop {
+	from {
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		transform: translate3d(calc(-50% - (var(--_grid-gap) / 2)), 0, 0);
+	}
+}

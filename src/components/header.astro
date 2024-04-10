@@ -1,0 +1,407 @@
+---
+import siteConfig from "@/config/site_config.json";
+
+const links = siteConfig.navigationLinks;
+---
+
+<header class="main-header-wrapper">
+	<div>
+		<div class="mobile-nav-dark-overlay" id="mobile-nav-dark-overlay"></div>
+		<div class="header-container-wrapper">
+			<nav class="header-nav">
+				<ul>
+					{
+						links.map((link) => {
+							return (
+								<li>
+									<a
+										title={link.title}
+										href={link.url}
+										data-astro-prefetch
+									>
+										{link.name}
+									</a>
+								</li>
+							);
+						})
+					}
+				</ul>
+			</nav>
+			<button
+				class="mobile-nav-toggle-btn"
+				aria-label="Toggle mobile navigation"
+				aria-expanded="false"
+				aria-controls="mobile-navbar"
+				type="button"
+			>
+				<span></span>
+				<span></span>
+				<span></span>
+			</button>
+			<nav
+				id="mobile-navbar"
+				class="mobile-navbar"
+				aria-hidden="true"
+				role="navigation"
+			>
+				<div class="mobile-navbar-wrapper">
+					<ul>
+						{
+							links.map((link) => {
+								return (
+									<li>
+										<a
+											title={link.title}
+											href={link.url}
+											data-astro-prefetch
+										>
+											{link.name}
+										</a>
+									</li>
+								);
+							})
+						}
+					</ul>
+				</div>
+			</nav>
+			<script>
+				import { batchListeners } from "@/lib/utils";
+
+				const mobileNavToggleBtn = document.querySelector(
+					".mobile-nav-toggle-btn",
+				);
+				const darkOverlay = document.querySelector(
+					".mobile-nav-dark-overlay",
+				);
+
+				if (
+					!mobileNavToggleBtn ||
+					!(mobileNavToggleBtn instanceof HTMLButtonElement)
+				) {
+					throw new Error(
+						"[MobileNavigation] mobileNavToggleBtn is not found or not an instance of HTMLButtonElement",
+					);
+				}
+
+				if (!darkOverlay || !(darkOverlay instanceof HTMLElement)) {
+					throw new Error(
+						"[MobileNavigation] darkOverlay is not found or not an instance of HTMLElement",
+					);
+				}
+
+				batchListeners("click", [
+					{
+						element: mobileNavToggleBtn,
+						callback: () => {
+                            if (mobileNavToggleBtn.getAttribute("aria-expanded") === "true") {
+                                mobileNavToggleBtn.setAttribute("aria-expanded", "false");
+                                document.body.classList.remove("mobile-nav-open", "lock-scroll");
+                            } else {
+                                mobileNavToggleBtn.setAttribute("aria-expanded", "true");
+                                document.body.classList.add("mobile-nav-open", "lock-scroll");
+                            }
+						},
+					},
+					{
+						element: darkOverlay,
+						callback: () => {
+							document.body.classList.remove("mobile-nav-open", "lock-scroll");
+						},
+					},
+				]);
+
+                window.matchMedia("(min-width: 950px)").addEventListener("change", (evt) => {
+                    if (evt.matches) {
+                        document.body.classList.remove("mobile-nav-open", "lock-scroll");
+                    }
+                });
+			</script>
+			<a
+				class="font-brand h5 logo"
+				href="/"
+				title={`${siteConfig.siteName}'s Homepage`}
+			>
+				{siteConfig.siteName}
+			</a>
+			<div class="header-cta-container">
+				<a class="primary btn" href="/contact" title="Contact me">
+					Contact
+				</a>
+			</div>
+		</div>
+	</div>
+</header>
+<style lang="scss">
+	@use "@/styles/mixins/sizes.scss" as *;
+
+	.logo {
+		display: none;
+
+		@include s-mobilexs {
+			display: inline-flex;
+		}
+	}
+
+	body.mobile-nav-open {
+		.header-container-wrapper {
+			background-color: hsl(
+				var(--clr-background) / var(--_bg-opacity, 1)
+			);
+		}
+
+		.mobile-nav-dark-overlay,
+		.mobile-navbar,
+		.mobile-navbar-wrapper ul li a {
+			visibility: visible;
+			opacity: 1;
+		}
+
+		.mobile-navbar-wrapper ul li a {
+			transform: translate3d(0, 0, 0);
+		}
+
+		.mobile-nav-toggle-btn span {
+			&:first-child {
+				--_rotate: 45deg;
+			}
+
+			&:nth-child(2) {
+				width: 0;
+
+				opacity: 0;
+			}
+
+			&:nth-child(3) {
+				--_rotate: -45deg;
+
+				--_width: 100%;
+			}
+
+			&:nth-child(1),
+			&:nth-child(3) {
+				--_y: -50%;
+
+				top: 50%;
+			}
+		}
+	}
+
+	.main-header-wrapper {
+		--_zi: 99;
+		--_zi-behind: 98;
+		--_height: 6rem;
+
+		z-index: var(--_zi);
+
+		background-color: hsl(var(--clr-background) / var(--_bg-opacity, 1));
+	}
+
+	.logo {
+		grid-area: logo;
+	}
+
+	.header-cta-container {
+		grid-area: cta;
+
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+
+	.mobile-nav-dark-overlay {
+		content: "";
+
+		visibility: hidden;
+		opacity: 0;
+
+		position: fixed;
+
+		top: 0;
+		left: 0;
+
+		width: 110vw;
+		height: 110vh;
+
+		background-color: hsl(0 0% 0% / 0.5);
+
+		z-index: var(--_zi-behind);
+	}
+
+	.mobile-nav-dark-overlay,
+	.mobile-navbar {
+		transition-property: opacity, visibility;
+		will-change: opacity, visibility;
+		transition-duration: var(--animation-duration, 250ms);
+		transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+		opacity: 0;
+		visibility: hidden;
+	}
+
+	.header-container-wrapper {
+		display: grid;
+		align-items: center;
+
+		position: relative;
+
+		gap: 1.25rem;
+
+		height: var(--_height);
+
+		grid-template-areas: "nav logo cta";
+		grid-template-columns: auto auto 1fr;
+
+		padding-inline: 1rem;
+
+		z-index: var(--_zi);
+
+		@include s-tablet {
+			grid-template-areas: "logo nav cta";
+
+			padding-inline: 2.5rem;
+
+			gap: 2.5rem;
+		}
+
+		@include s-desktoplg {
+			grid-template-areas: "nav logo cta";
+			grid-template-columns: 1fr auto 1fr;
+		}
+
+		.mobile-nav-toggle-btn,
+		.header-nav {
+			grid-area: nav;
+		}
+
+		.header-nav {
+			display: none;
+
+			@include s-tablet {
+				display: initial;
+			}
+
+			ul {
+				display: flex;
+				align-items: center;
+
+				a {
+					padding-inline: 1rem;
+				}
+			}
+		}
+	}
+
+	.mobile-navbar {
+		width: 100%;
+
+		position: fixed;
+
+		right: 0;
+		top: var(--_height);
+
+		z-index: var(--_zi);
+
+		@include s-tablet {
+			display: none;
+		}
+	}
+
+	.mobile-navbar-wrapper {
+		position: relative;
+
+		padding: 2rem;
+
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+
+		max-height: calc(100dvh - var(--_height));
+
+		background-color: hsl(var(--clr-background) / var(--_bg-opacity, 1));
+
+		border-top-width: 1px;
+		border-top-style: solid;
+
+		ul {
+			display: flex;
+			flex-direction: column;
+
+			gap: 1rem;
+
+			li a {
+				transform: translate3d(-10%, 0, 0);
+
+				opacity: 0;
+				visibility: hidden;
+
+				transition-property: transform, opacity, visibility;
+				will-change: transform, opacity, visibility;
+				transition-duration: var(--animation-duration, 250ms);
+				transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+			}
+
+			li {
+				@for $i from 2 through 4 {
+					&:nth-child(#{$i}) {
+						transition-delay: calc(250ms * (#{$i - 1} / 2));
+					}
+				}
+			}
+		}
+	}
+
+	.mobile-nav-toggle-btn {
+		background-color: transparent;
+
+		padding: 0;
+
+		min-width: auto;
+		min-height: auto;
+		width: 1.25rem;
+		height: 1.25rem;
+
+		position: relative;
+
+		@include s-tablet {
+			display: none;
+		}
+
+		&:hover {
+			background-color: transparent;
+		}
+
+		span {
+			display: inline-block;
+
+			background-color: hsl(var(--clr-text));
+
+			width: var(--_width, 100%);
+			height: 0.125rem;
+
+			position: absolute;
+
+			left: 0;
+
+			transform: translate3d(var(--_x, 0), var(--_y, 0), var(--_z, 0))
+				scale(var(--_scale, 1)) rotate(var(--_rotate, 0deg));
+
+			transition-property: transform, width, top, opacity;
+			will-change: transform, width, top, opacity;
+			transition-duration: var(--animation-duration, 250ms);
+			transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+			&:first-child {
+				top: 10%;
+			}
+
+			&:nth-child(2) {
+				top: 50%;
+				--_y: -50%;
+			}
+
+			&:nth-child(3) {
+				top: 85%;
+				--_width: 67%;
+			}
+		}
+	}
+</style>

@@ -1,0 +1,22 @@
+{
+	"title": "Programmers' Sanctuary",
+	"description": "Hello, my name is Aaron. I am a student and a self-taught web developer for at least a year. My goal is to share my knowledge, learn, and help my family financially. In this portfolio, we will see what I have built so far.",
+	"navigationLinks": [
+		{
+			"name": "Home",
+			"title": "Homepage",
+			"url": "/"
+		},
+		{
+			"name": "About",
+			"title": "About Me",
+			"url": "/about"
+		},
+		{
+			"name": "Portfolio",
+			"title": "Portfolio of Programmers' Sanctuary Projects",
+			"url": "/portfolio"
+		}
+	],
+	"siteName": "Programmers' Sanctuary"
+}
