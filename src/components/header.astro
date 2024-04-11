@@ -245,16 +245,15 @@ const links = siteConfig.navigationLinks;
 
 		.mobile-navbar-wrapper ul {
 			li {
-				transform: translate3d(0, 0, 0);
+				a {
+					transform: translate3d(0, 0, 0);
+				}
 
 				@for $i from 1 through 4 {
 					&:nth-child(#{$i}) {
 						a {
 							transition-delay: calc(
-								var(--animation-duration, 250ms) *
-									1.25 *
-									#{$i /
-									2}
+								var(--animation-duration, 250ms) * 2 * ($i / 4)
 							);
 						}
 					}

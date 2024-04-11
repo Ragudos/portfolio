@@ -1,0 +1,8 @@
+<!-- A SVG spritesheet for optimized icon fetching -->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300">
+    <defs>
+        <g id="timeline-badge" viewBox="0 0 16 16">
+            <path fill="currentColor" d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z" />
+        </g>
+    </defs>
+</svg>

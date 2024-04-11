@@ -3,7 +3,18 @@ import MainImage from "@/assets/main_image.jpg";
 import siteConfig from "@/config/site_config.json";
 import Main from "@/layouts/main.astro";
 import "@/styles/marquee.scss";
+import "@/styles/timeline.scss";
 import { Image } from "astro:assets";
+
+type WorkExperience = {
+	company: string;
+	position: string;
+	location: string;
+	startDate: string;
+	endDate: string;
+};
+
+const workExperience = siteConfig.workExperience as WorkExperience[];
 ---
 
 <Main canonicalUrl={Astro.url.toString()}>
@@ -131,7 +142,10 @@ import { Image } from "astro:assets";
 		aria-describedby="work-experience-section__title"
 	>
 		<div class="work-experience-section__wrapper wrapper">
-			<h2 id="work-experience-section__title" class="font-brand">
+			<h2
+				id="work-experience-section__title"
+				class="work-experience-section__title font-brand"
+			>
 				{siteConfig.pages.index.workExperience.title}
 			</h2>
 			<p
@@ -141,23 +155,89 @@ import { Image } from "astro:assets";
 				{siteConfig.pages.index.workExperience.description}
 			</p>
 
-			<div class="list-of-work-experience_wrapper">
+			<div class="list-of-work-experience__wrapper">
 				<ul class="list-of-work-experience">
 					{
-						siteConfig.workExperience.length !== 0 ? (
+						workExperience.length !== 0 ? (
 							<>
 								{
 									// We just let this be for now.
-									siteConfig.workExperience.map((exp) => {
-										return (
-											<li class="work-experience-card" />
-										);
-									})
+									workExperience
+										.sort((a, b) => {
+											// This is fine because Astro compiles this statically.
+											// Do not do this on dynamic stuff, though, as it's resource
+											// intensive.
+											return (
+												new Date(
+													a.startDate,
+												).getTime() -
+												new Date(b.startDate).getTime()
+											);
+										})
+										.map((exp) => {
+											const startTimeDate = new Date(
+												exp.startDate,
+											);
+											const endTimeDate = new Date(
+												exp.endDate,
+											);
+
+											return (
+												<li class="timeline__item">
+													<div class="timeline__item__badge">
+														<svg class="w-4 h-4">
+															<use href="/icons.svg#timeline-badge" />
+														</svg>
+													</div>
+													<div class="timeline__content">
+														<div class="font-bold h6">
+															<time
+																datetime={startTimeDate.toISOString()}
+															>
+																{startTimeDate.toLocaleDateString()}
+															</time>
+															<div>to</div>
+															<time
+																datetime={endTimeDate.toISOString()}
+															>
+																{endTimeDate.toLocaleDateString()}
+															</time>
+														</div>
+														<div>
+															<div>
+																<div class="font-semibold">
+																	{
+																		exp.position
+																	}
+																</div>
+																<div>
+																	{
+																		exp.company
+																	}
+																</div>
+																<div>
+																	{
+																		exp.location
+																	}
+																</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											);
+										})
 								}
 							</>
 						) : (
-							<li class="work-experience-card">
-								<p>No work experience to show.</p>
+							<li class="timeline__item">
+								<div class="timeline__item__badge">
+									<svg class="w-4 h-4">
+										<use href="/icons.svg#timeline-badge" />
+									</svg>
+								</div>
+								<div class="timeline__content">
+									No work experience so far.
+								</div>
 							</li>
 						)
 					}
@@ -229,7 +309,7 @@ import { Image } from "astro:assets";
 		}
 
 		.marquee-container {
-			width: 85vw;
+			max-width: 85vw;
 		}
 
 		.skill-card {
@@ -241,6 +321,88 @@ import { Image } from "astro:assets";
 			i {
 				font-size: 2rem;
 			}
+		}
+
+		.no-work-experience {
+			color: hsl(var(--clr-muted-foreground) / var(--_text-opacity, 1));
+			p {
+				margin-block: 0;
+			}
+		}
+
+		.work-experience-section__wrapper {
+			display: grid;
+			align-items: center;
+			grid-template-areas:
+				"title title"
+				"desc desc"
+				"timeline timeline";
+			gap: 1rem;
+
+			margin-top: 1rem;
+
+			@include s-mobilesm {
+				grid-template-areas: "timeline title" "timeline desc";
+				gap: 2rem;
+
+				.work-experience-section__description {
+					margin-top: 0;
+					align-self: flex-start;
+				}
+
+				.work-experience-section__title {
+					align-self: flex-end;
+				}
+			}
+		}
+
+		.work-experience-section__title {
+			grid-area: title;
+		}
+
+		.work-experience-section__description {
+			grid-area: desc;
+
+			max-width: none;
+
+			margin-top: 1rem;
+			margin-bottom: 0;
+		}
+
+		.list-of-work-experience__wrapper {
+			grid-area: timeline;
+		}
+
+		.work-experience-card {
+			box-shadow:
+				0px 1px 1px hsl(0 0% 0% / 0.5),
+				0px 2px 2px hsl(0 0% 0% / 0.5),
+				0px 4px 4px hsl(0 0% 0% / 0.5),
+				0px 8px 8px hsl(0 0% 0% / 0.5);
+
+			padding: 1rem;
+
+			border-radius: var(--radius);
+
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+
+			width: 20em;
+			height: 20em;
+		}
+
+		.timeline__content {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+
+			> div {
+				display: flex;
+				gap: 0.5rem;
+			}
+
+			text-align: left;
 		}
 	</style>
 </Main>

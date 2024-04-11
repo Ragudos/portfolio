@@ -143,7 +143,44 @@ section {
 	display: none;
 }
 
+.w-4 {
+	width: 1rem;
+}
+
+.h-4 {
+	height: 1rem;
+}
+
+.w-5 {
+	width: 1.25rem;
+}
+
+.h-5 {
+	height: 1.25rem;
+}
+
+.w-6 {
+	width: 1.5rem;
+}
+
+.h-6 {
+	height: 1.5rem;
+}
+
+.font-bold {
+	font-weight: 700;
+}
+
+.font-semibold {
+	font-weight: 600;
+}
+
 [data-theme="dark"] {
+	.border-on-dark {
+		border-width: 1px;
+		border-style: solid;
+	}
+
 	.hide-on-dark {
 		display: none;
 	}
@@ -155,6 +192,11 @@ section {
 
 @media (prefers-reduced-motion: dark) {
 	[data-theme="system"] {
+		.border-on-dark {
+			border-width: 1px;
+			border-style: solid;
+		}
+
 		.hide-on-dark {
 			display: none;
 		}
