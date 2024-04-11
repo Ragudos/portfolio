@@ -2,6 +2,7 @@
 import siteConfig from "@/config/site_config.json";
 import Footer from "@/components/footer.astro";
 import Header from "@/components/header.astro";
+import ScreensizeIndicator from "@/components/screensize-indicator.astro";
 import Seo, { type Props as SeoProps } from "@/components/seo.astro";
 import "@/styles/globals.scss";
 import { ViewTransitions } from "astro:transitions";
@@ -49,6 +50,7 @@ const isDev = process.env.NODE_ENV !== "production";
 		/>
 		<script src="@/lib/theme"></script>
 		<ViewTransitions />
+		<slot name="head" />
 	</head>
 	<body>
 		<Header />
@@ -56,5 +58,6 @@ const isDev = process.env.NODE_ENV !== "production";
 			<slot />
 		</main>
 		<Footer />
+		{isDev && <ScreensizeIndicator />}
 	</body>
 </html>

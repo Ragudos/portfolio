@@ -1,0 +1,123 @@
+<div class="screensize-indicator">
+	<div class="twoxs">2xs</div>
+	<div class="xs">xs</div>
+	<div class="sm">sm</div>
+	<div class="md">md</div>
+	<div class="lg">lg</div>
+	<div class="xl">xl</div>
+	<div class="twoxl">2xl</div>
+	<div class="threexl">3xl</div>
+</div>
+<style lang="scss">
+	@use "@/styles/mixins/sizes.scss" as *;
+
+	.screensize-indicator {
+		position: fixed;
+
+		bottom: 1rem;
+		right: 1rem;
+
+		width: 2rem;
+		height: 2rem;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		z-index: 999;
+
+		background-color: hsl(var(--clr-accent));
+		color: hsl(var(--clr-accent-foreground));
+
+		border-radius: 50%;
+		box-shadow:
+			0px 1px 1px hsl(var(--clr-accent) / 0.1),
+			0px 2px 2px hsl(var(--clr-accent) / 0.1),
+			0px 4px 4px hsl(var(--clr-accent) / 0.1),
+			0px 8px 8px hsl(var(--clr-accent) / 0.1);
+
+		.twoxs {
+			@include s-mobilexs {
+				display: none;
+			}
+		}
+
+		.xs {
+			@include s-mobilexs {
+				display: block;
+			}
+
+			@include s-mobilesm {
+				display: none;
+			}
+		}
+
+		.sm {
+			display: none;
+
+			@include s-mobilesm {
+				display: block;
+			}
+
+			@include s-mobile {
+				display: none;
+			}
+		}
+
+		.md {
+			display: none;
+
+			@include s-mobile {
+				display: block;
+			}
+
+			@include s-tablet {
+				display: none;
+			}
+		}
+
+		.lg {
+			display: none;
+
+			@include s-tablet {
+				display: block;
+			}
+
+			@include s-desktop {
+				display: none;
+			}
+		}
+
+		.xl {
+			display: none;
+
+			@include s-desktop {
+				display: block;
+			}
+
+			@include s-desktoplg {
+				display: none;
+			}
+		}
+
+		.twoxl {
+			display: none;
+
+			@include s-desktoplg {
+				display: block;
+			}
+
+			@include s-desktopxl {
+				display: none;
+			}
+		}
+
+		.threexl {
+			display: none;
+
+			@include s-desktopxl {
+				display: block;
+			}
+		}
+	}
+</style>

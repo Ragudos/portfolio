@@ -22,6 +22,10 @@
 		"index": {
 			"title": "Your partner in developing websites",
 			"description": "Hello, my name is Aaron Ragudos. I am a student and a self-taught web developer for at least a year. My goal is to share my knowledge, learn, and help my family financially. In this portfolio, we will see what I have built so far.",
+			"cta": {
+				"text": "Hire me",
+				"url": "/contact"
+			},
 			"about": {
 				"title": "A short sumary about me",
 				"description": "I was not aware of the world of software development until I made a website for my school project. The challenges made me want to learn more about technology, specifically, web development. Thus, I started learning HTML5, CSS3, and Javascript on my own."

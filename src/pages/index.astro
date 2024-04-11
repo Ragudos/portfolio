@@ -4,7 +4,7 @@ import siteConfig from "@/config/site_config.json";
 import Main from "@/layouts/main.astro";
 import "@/styles/marquee.scss";
 import "@/styles/timeline.scss";
-import { Image } from "astro:assets";
+import { getImage, Image } from "astro:assets";
 
 type WorkExperience = {
 	company: string;
@@ -15,9 +15,17 @@ type WorkExperience = {
 };
 
 const workExperience = siteConfig.workExperience as WorkExperience[];
+const transformedMainImage = await getImage({
+	src: MainImage,
+	width: 300,
+	format: "webp",
+});
 ---
 
 <Main canonicalUrl={Astro.url.toString()}>
+	<Fragment slot="head">
+		<link rel="preload" as="image" href={transformedMainImage.src} />
+	</Fragment>
 	<section
 		aria-labelledby="hero-section__title"
 		aria-describedby="hero-section__description"
@@ -29,7 +37,11 @@ const workExperience = siteConfig.workExperience as WorkExperience[];
 			<p id="hero-section__description">
 				{siteConfig.pages.index.description}
 			</p>
-			<div class="hero-cta-container"></div>
+			<div class="hero-cta-container">
+				<a href={siteConfig.pages.index.cta.url} class="primary btn">
+					{siteConfig.pages.index.cta.text}
+				</a>
+			</div>
 		</div>
 	</section>
 	<section
@@ -55,10 +67,7 @@ const workExperience = siteConfig.workExperience as WorkExperience[];
 				<Image
 					src={MainImage}
 					width={300}
-					widths={[500, 400, 300, 200]}
 					alt="A photograph of Aaron Ragudos in a suit, slacks, and a necktie smiling brightly in a success pose."
-					format="webp"
-					loading="eager"
 				/>
 			</div>
 		</div>
@@ -245,6 +254,7 @@ const workExperience = siteConfig.workExperience as WorkExperience[];
 			</div>
 		</div>
 	</section>
+	<section></section>
 	<style lang="scss">
 		@use "@/styles/mixins/sizes.scss" as *;
 

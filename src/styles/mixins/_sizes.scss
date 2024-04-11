@@ -1,11 +1,5 @@
-@mixin s-tablet {
-	@media only screen and (min-width: 950px) {
-		@content;
-	}
-}
-
-@mixin s-mobile {
-	@media only screen and (min-width: 768px) {
+@mixin s-mobilexs {
+	@media only screen and (min-width: 480px) {
 		@content;
 	}
 }
@@ -16,8 +10,14 @@
 	}
 }
 
-@mixin s-mobilexs {
-	@media only screen and (min-width: 480px) {
+@mixin s-mobile {
+	@media only screen and (min-width: 768px) {
+		@content;
+	}
+}
+
+@mixin s-tablet {
+	@media only screen and (min-width: 950px) {
 		@content;
 	}
 }
