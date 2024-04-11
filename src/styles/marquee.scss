@@ -1,3 +1,10 @@
+@use "./mixins/sizes.scss" as *;
+
+/**
+ * @license
+ * Credits to Kevin Powell for the main idea of this animation.
+ */
+
 .marquee-container {
 	--_visibility-duration: var(--animation-duration, 250ms);
 	--_grid-gap: 1.5rem;
@@ -26,7 +33,7 @@
 	gap: var(--_grid-gap, 2rem);
 }
 
-.marquee-container[data-animate="true"]:not([data-isloading="true"]) {
+.marquee-container[data-animate="true"][data-isloading="false"] {
 	position: relative;
 	padding-block: 3rem;
 
@@ -44,9 +51,7 @@
 
 	.marquee-track {
 		width: fit-content;
-		animation: marquee-mobile
-			calc(var(--marquee-speed, 3000ms) * (var(--_children-count, 6) * 2))
-			linear infinite;
+		animation: marquee-mobile calc(var(--marquee-speed, 3000ms) * (var(--_children-count, 6) * 2)) linear infinite;
 
 		@include s-desktop {
 			animation-name: marquee-desktop;

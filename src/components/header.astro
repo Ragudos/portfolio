@@ -81,8 +81,6 @@ const links = siteConfig.navigationLinks;
 				</div>
 			</nav>
 			<script>
-				import { batchListeners } from "@/lib/utils";
-
 				const getTogglers = (): [HTMLButtonElement, HTMLElement] => {
 					const mobileNavToggleBtn = document.querySelector(
 						".mobile-nav-toggle-btn",
@@ -155,22 +153,12 @@ const links = siteConfig.navigationLinks;
 				};
 
 				const media = window.matchMedia("(min-width: 950px)");
-
-				media.addEventListener("change", onMediaChange);
-
-				batchListeners("click", [
-					{
-						element: mobileNavToggleBtn,
-						callback: onMobileNavToggleBtnClick(mobileNavToggleBtn),
-					},
-					{
-						element: darkOverlay,
-						callback: onDarkOverlayClick,
-					},
-				]);
-
 				let mobileBtnListener =
 					onMobileNavToggleBtnClick(mobileNavToggleBtn);
+
+				media.addEventListener("change", onMediaChange);
+				mobileNavToggleBtn.addEventListener("click", mobileBtnListener);
+				darkOverlay.addEventListener("click", onDarkOverlayClick);
 
 				document.addEventListener("astro:before-preparation", () => {
 					const [mobileNavToggleBtn, darkOverlay] = getTogglers();
@@ -191,17 +179,14 @@ const links = siteConfig.navigationLinks;
 					}
 
 					header.style.setProperty("--animation-duration", "0s");
-
 					mobileNavToggleBtn.removeEventListener(
 						"click",
 						mobileBtnListener,
 					);
-
 					darkOverlay.removeEventListener(
 						"click",
 						onDarkOverlayClick,
 					);
-
 					media.removeEventListener("change", onMediaChange);
 				});
 
@@ -210,19 +195,12 @@ const links = siteConfig.navigationLinks;
 
 					mobileBtnListener =
 						onMobileNavToggleBtnClick(mobileNavToggleBtn);
-
 					media.addEventListener("change", onMediaChange);
-
-					batchListeners("click", [
-						{
-							element: mobileNavToggleBtn,
-							callback: mobileBtnListener,
-						},
-						{
-							element: darkOverlay,
-							callback: onDarkOverlayClick,
-						},
-					]);
+					mobileNavToggleBtn.addEventListener(
+						"click",
+						mobileBtnListener,
+					);
+					darkOverlay.addEventListener("click", onDarkOverlayClick);
 				});
 			</script>
 			<a

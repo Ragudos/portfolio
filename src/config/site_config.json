@@ -18,5 +18,86 @@
 			"url": "/portfolio"
 		}
 	],
+	"pages": {
+		"index": {
+			"title": "Your partner in developing websites",
+			"description": "Hello, my name is Aaron Ragudos. I am a student and a self-taught web developer for at least a year. My goal is to share my knowledge, learn, and help my family financially. In this portfolio, we will see what I have built so far.",
+			"about": {
+				"title": "A short sumary about me",
+				"description": "I was not aware of the world of software development until I made a website for my school project. The challenges made me want to learn more about technology, specifically, web development. Thus, I started learning HTML5, CSS3, and Javascript on my own."
+			},
+			"skills": {
+				"title": "Technologies I have used and learned",
+				"description": "A list of technologies I have learned and used in my projects. All of these are either me knowing the fundamentals or have built a project with them."
+			},
+			"workExperience": {
+				"title": "My work experience",
+				"description": "A timeline of my experience in the professional world."
+			}
+		}
+	},
+	"workExperience": [],
+	"skills": [
+		{
+			"icon": "devicon-html5-plain colored",
+			"name": "HTML5"
+		},
+		{
+			"icon": "devicon-css3-plain colored",
+			"name": "CSS3"
+		},
+		{
+			"icon": "devicon-sass-original colored",
+			"name": "Sass"
+		},
+		{
+			"icon": "devicon-tailwindcss-original colored",
+			"name": "TailwindCSS"
+		},
+		{
+			"icon": "devicon-javascript-plain colored",
+			"name": "JavaScript"
+		},
+		{
+			"icon": "devicon-typescript-plain colored",
+			"name": "TypeScript"
+		},
+		{
+			"icon": "devicon-astro-plain colored",
+			"name": "AstroJS"
+		},
+		{
+			"icon": "devicon-nextjs-plain colored inherit-color",
+			"name": "NextJS"
+		},
+		{
+			"icon": "devicon-react-original colored",
+			"name": "ReactJS"
+		},
+		{
+			"icon": "devicon-nodejs-plain colored",
+			"name": "NodeJS"
+		},
+		{
+			"icon": "devicon-express-original colored",
+			"name": "ExpressJS"
+		},
+		{
+			"icon": "devicon-socketio-original colored inherit-color",
+			"name": "Socket IO"
+		},
+		{
+			"icon": "devicon-postgresql-plain colored",
+			"name": "PostgresSQL"
+		},
+		{
+			"icon": "devicon-rust-original colored inherit-color",
+			"name": "Rust"
+		},
+		{
+			"icon": "devicon-figma-plain colored",
+			"name": "Figma"
+		}
+	],
 	"siteName": "Programmers' Sanctuary"
 }

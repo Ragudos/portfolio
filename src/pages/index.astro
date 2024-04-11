@@ -1,7 +1,246 @@
 ---
+import MainImage from "@/assets/main_image.jpg";
+import siteConfig from "@/config/site_config.json";
 import Main from "@/layouts/main.astro";
+import "@/styles/marquee.scss";
+import { Image } from "astro:assets";
 ---
 
 <Main canonicalUrl={Astro.url.toString()}>
-	<h1 transition:animate="slide">Hi</h1>
+	<section
+		aria-labelledby="hero-section__title"
+		aria-describedby="hero-section__description"
+	>
+		<div class="wrapper">
+			<h1 class="font-brand" id="hero-section__title">
+				{siteConfig.pages.index.title}
+			</h1>
+			<p id="hero-section__description">
+				{siteConfig.pages.index.description}
+			</p>
+			<div class="hero-cta-container"></div>
+		</div>
+	</section>
+	<section
+		class="about-summary-section"
+		aria-labelledby="about-summary-section__title"
+		aria-describedby="about-summary-section__description"
+	>
+		<div class="about-summary-section__wrapper wrapper">
+			<h2
+				class="about-summary-section__title font-brand"
+				id="about-summary-section__title"
+			>
+				{siteConfig.pages.index.about.title}
+			</h2>
+			<p
+				class="about-summary-section__description"
+				id="about-summary-section__description"
+			>
+				{siteConfig.pages.index.about.description}
+			</p>
+
+			<div class="img-container">
+				<Image
+					src={MainImage}
+					width={300}
+					widths={[500, 400, 300, 200]}
+					alt="A photograph of Aaron Ragudos in a suit, slacks, and a necktie smiling brightly in a success pose."
+					format="webp"
+					loading="eager"
+				/>
+			</div>
+		</div>
+	</section>
+	<section
+		class="skills-summary-section"
+		aria-describedby="skills-summary-section__description"
+		aria-labelledby="skills-summary-section__title"
+	>
+		<div class="skills-summary-section__wrapper wrapper">
+			<h2 id="skill-summary-section__title" class="font-brand">
+				{siteConfig.pages.index.skills.title}
+			</h2>
+			<p
+				id="skills-summary-section__description"
+				class="skills-summary-section__description"
+			>
+				{siteConfig.pages.index.skills.description}
+			</p>
+
+			<div
+				class="marquee-container"
+				id="marquee-skills"
+				style={`--_children-count: ${siteConfig.skills.length}`}
+			>
+				<div class="marquee-track list-of-skills__wrapper">
+					<ul class="marquee-grid list-of-skills">
+						{
+							siteConfig.skills.map((skill) => {
+								return (
+									<li class="skill-card">
+										<i class={skill.icon} />
+										<span>{skill.name}</span>
+									</li>
+								);
+							})
+						}
+					</ul>
+				</div>
+			</div>
+			<script>
+				import { maybeStartMarquee } from "@/lib/marquee";
+
+				function getMarqueeEl() {
+					const marqueeEl = document.getElementById("marquee-skills");
+
+					if (!(marqueeEl instanceof HTMLDivElement)) {
+						throw new Error(
+							"[Marquee] Marquee container is not an HTMLDivElement.",
+						);
+					}
+
+					return marqueeEl;
+				}
+
+				const marqueeEl = getMarqueeEl();
+				let cleanupFunction = maybeStartMarquee(marqueeEl);
+
+				document.addEventListener("astro:before-preparation", (evt) => {
+					if (evt.to.pathname !== "/") {
+						cleanupFunction();
+					}
+				});
+
+				document.addEventListener("astro:page-load", (evt) => {
+					if (!(evt.target instanceof Document)) {
+						return;
+					}
+
+					const url = new URL(evt.target.URL);
+
+					if (url.pathname === "/") {
+						cleanupFunction = maybeStartMarquee(getMarqueeEl());
+					}
+				});
+			</script>
+		</div>
+	</section>
+	<section
+		class="work-experience-section"
+		aria-describedby="work-experience-section__title"
+	>
+		<div class="work-experience-section__wrapper wrapper">
+			<h2 id="work-experience-section__title" class="font-brand">
+				{siteConfig.pages.index.workExperience.title}
+			</h2>
+			<p
+				id="work-experience-section__description"
+				class="work-experience-section__description"
+			>
+				{siteConfig.pages.index.workExperience.description}
+			</p>
+
+			<div class="list-of-work-experience_wrapper">
+				<ul class="list-of-work-experience">
+					{
+						siteConfig.workExperience.length !== 0 ? (
+							<>
+								{
+									// We just let this be for now.
+									siteConfig.workExperience.map((exp) => {
+										return (
+											<li class="work-experience-card" />
+										);
+									})
+								}
+							</>
+						) : (
+							<li class="work-experience-card">
+								<p>No work experience to show.</p>
+							</li>
+						)
+					}
+				</ul>
+			</div>
+		</div>
+	</section>
+	<style lang="scss">
+		@use "@/styles/mixins/sizes.scss" as *;
+
+		.about-summary-section__wrapper {
+			display: grid;
+			align-items: center;
+			grid-template-areas:
+				"title title"
+				"img img"
+				"desc desc";
+			gap: 1rem;
+
+			margin-top: 1rem;
+
+			@include s-mobilesm {
+				grid-template-areas: "img title" "img desc";
+				gap: 2rem;
+
+				.about-summary-section__description {
+					margin-top: 0;
+					align-self: flex-start;
+				}
+
+				.about-summary-section__title {
+					align-self: flex-end;
+				}
+			}
+		}
+
+		.about-summary-section__title {
+			grid-area: title;
+		}
+
+		.about-summary-section__description {
+			grid-area: desc;
+
+			max-width: none;
+
+			margin-top: 1rem;
+			margin-bottom: 0;
+		}
+
+		.img-container {
+			grid-area: img;
+
+			img {
+				height: min-content;
+			}
+
+			margin: auto;
+
+			border: 4px solid hsl(var(--clr-accent) / var(--_border-opacity, 1));
+			border-radius: var(--radius);
+
+			box-shadow:
+				0px 1px 1px hsl(var(--clr-accent) / 0.075),
+				0px 2px 2px hsl(var(--clr-accent) / 0.075),
+				0px 4px 4px hsl(var(--clr-accent) / 0.075),
+				0px 8px 8px hsl(var(--clr-accent) / 0.075);
+
+			overflow: hidden;
+		}
+
+		.marquee-container {
+			width: 85vw;
+		}
+
+		.skill-card {
+			span {
+				display: inline-block;
+				width: max-content;
+			}
+
+			i {
+				font-size: 2rem;
+			}
+		}
+	</style>
 </Main>

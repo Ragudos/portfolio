@@ -1,11 +1,15 @@
+import sitemap from "@astrojs/sitemap";
+import robotsTxt from "astro-robots-txt";
 import { defineConfig } from "astro/config";
 
-import sitemap from "@astrojs/sitemap";
+import compressor from "astro-compressor";
+import { remarkReadingTime } from "./plugins/remark-reading-time.mjs";
 
 // https://astro.build/config
 export default defineConfig({
 	prefetch: true,
-	integrations: [sitemap()],
+	integrations: [sitemap(), robotsTxt(), compressor()],
+	site: "https://aaronragudos.com",
 	i18n: {
 		defaultLocale: "en",
 		locales: ["en", "ph"],
@@ -16,5 +20,8 @@ export default defineConfig({
 				autoprefixer: {},
 			},
 		},
+	},
+	markdown: {
+		remarkPlugins: [remarkReadingTime],
 	},
 });
