@@ -66,6 +66,7 @@ const transformedMainImage = await getImage({
 			<div class="img-container">
 				<Image
 					src={MainImage}
+					loading="eager"
 					width={300}
 					alt="A photograph of Aaron Ragudos in a suit, slacks, and a necktie smiling brightly in a success pose."
 				/>
@@ -254,7 +255,30 @@ const transformedMainImage = await getImage({
 			</div>
 		</div>
 	</section>
-	<section></section>
+	<section
+		class="latest-projects-sections"
+		aria-labelledby="latest-projects-section__title"
+		aria-describedby="latest-projects-section__description"
+	>
+		<div class="latest-projects-section__wrapper wrapper">
+			<h2
+				id="latest-projects-section__title"
+				class="latest-projects-section__title"
+			>
+				{siteConfig.pages.index.latestProjects.title}
+			</h2>
+			<p
+				id="latest-projects-section__description"
+				class="latest-projects-section__description"
+			>
+				{siteConfig.pages.index.latestProjects.description}
+			</p>
+
+			<div class="latest-projects-list__wrapper">
+				<ul class="latest-projects-list"></ul>
+			</div>
+		</div>
+	</section>
 	<style lang="scss">
 		@use "@/styles/mixins/sizes.scss" as *;
 

@@ -15,8 +15,36 @@ const isDev = process.env.NODE_ENV !== "production";
 ---
 
 <!doctype html>
-<html lang="en" data-theme="system">
+<html lang="en">
 	<head>
+		<script id="set-theme-on-pageload" is:inline>
+			(function () {
+				try {
+					function processTheme() {
+						const KEY = "preferred_color_theme";
+						const theme = localStorage.getItem(KEY);
+						if (theme === "dark" || theme === "light") {
+							document.documentElement.setAttribute(
+								"data-theme",
+								theme,
+							);
+						} else {
+							document.documentElement.setAttribute(
+								"data-theme",
+								"system",
+							);
+						}
+					}
+
+					processTheme();
+					document.addEventListener("astro:after-swap", processTheme);
+				} catch (_err) {
+					console.log(
+						"LocalStorage is not supported. Please upgrade your browser to enable dark mode.",
+					);
+				}
+			})();
+		</script>
 		<meta name="charset" content="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="http-equiv" content="X-UA-Compatible" content="IE=edge" />
@@ -48,7 +76,6 @@ const isDev = process.env.NODE_ENV !== "production";
 			type="text/css"
 			href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
 		/>
-		<script src="@/lib/theme"></script>
 		<ViewTransitions />
 		<slot name="head" />
 	</head>
