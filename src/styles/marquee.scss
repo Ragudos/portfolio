@@ -51,7 +51,9 @@
 
 	.marquee-track {
 		width: fit-content;
-		animation: marquee-mobile calc(var(--marquee-speed, 3000ms) * (var(--_children-count, 6) * 2)) linear infinite;
+		animation: marquee-mobile
+			calc(var(--marquee-speed, 3000ms) * (var(--_children-count, 6) * 2))
+			linear infinite;
 
 		@include s-desktop {
 			animation-name: marquee-desktop;

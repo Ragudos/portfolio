@@ -1,60 +1,60 @@
 @use "./mixins/sizes.scss" as *;
 
 .timeline__item {
-    --_color: hsl(var(--clr-muted) / var(--_text-opacity, 0.87));
+	--_color: hsl(var(--clr-muted) / var(--_text-opacity, 0.87));
 
-    display: flex;
+	display: flex;
 
-    margin-left: var(--ti-ml, 1rem);
+	margin-left: var(--ti-ml, 1rem);
 
-    padding: var(--t-pb, 1rem) 0;
+	padding: var(--t-pb, 1rem) 0;
 
-    position: relative;
+	position: relative;
 
-    color: var(--_color);
+	color: var(--_color);
 
-    &::before {
-        content: "";
+	&::before {
+		content: "";
 
-        background-color: var(--_color);
+		background-color: var(--_color);
 
-        top: 0;
-        left: 0;
-        bottom: 0;
+		top: 0;
+		left: 0;
+		bottom: 0;
 
-        display: block;
+		display: block;
 
-        width: max(2px, 0.125rem);
+		width: max(2px, 0.125rem);
 
-        position: absolute;
-    }
+		position: absolute;
+	}
 }
 
 .timeline__item__badge {
-    border-radius: 50%;
+	border-radius: 50%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
 
-    z-index: 1;
+	z-index: 1;
 
-    position: relative;
+	position: relative;
 
-    margin-block: 0.5rem;
-    margin-right: 0.5rem;
-    margin-left: calc(2rem / -2 + 1px);
+	margin-block: 0.5rem;
+	margin-right: 0.5rem;
+	margin-left: calc(2rem / -2 + 1px);
 
-    width: 2rem;
-    height: 1rem;
+	width: 2rem;
+	height: 1rem;
 }
 
 .timeline__item__condensed {
-    padding-bottom: 0;
-    padding-top: 0.5rem;
+	padding-bottom: 0;
+	padding-top: 0.5rem;
 
-    &:last-child {
-        padding-bottom: var(--ti-pb, 1rem);
-    }
+	&:last-child {
+		padding-bottom: var(--ti-pb, 1rem);
+	}
 }
