@@ -5,6 +5,7 @@ import Main from "@/layouts/main.astro";
 import "@/styles/marquee.scss";
 import "@/styles/timeline.scss";
 import { getImage, Image } from "astro:assets";
+import { getCollection } from "astro:content";
 
 type WorkExperience = {
 	company: string;
@@ -20,6 +21,12 @@ const transformedMainImage = await getImage({
 	width: 300,
 	format: "webp",
 });
+
+const latestPortfolioProjects = (await getCollection("portfolio"))
+	.sort((a, b) => {
+		return a.data.startedOn.getTime() - b.data.startedOn.getTime();
+	})
+	.slice(0, 6);
 ---
 
 <Main canonicalUrl={Astro.url.toString()}>
@@ -275,7 +282,49 @@ const transformedMainImage = await getImage({
 			</p>
 
 			<div class="latest-projects-list__wrapper">
-				<ul class="latest-projects-list"></ul>
+				<ul class="latest-projects-list">
+					{
+						latestPortfolioProjects.map((project) => {
+							return (
+								<li>
+									<a
+										class="latest-projects-list__card border-on-dark"
+										href={`/portfolio/${project.slug}`}
+										title={project.data.title}
+									>
+										<figure>
+											<div>
+												<Image
+													src={
+														project.data.videoBanner
+													}
+													alt="A preview of the project's homepage"
+													width={300}
+												/>
+											</div>
+											<figcaption class="h5">
+												{project.data.name}
+											</figcaption>
+										</figure>
+										<div class="latest-projects-list__content">
+											<div class="latest-projects-list__desc">
+												{project.data.description}
+											</div>
+											<div class="latest-projects-list__timeframe">
+												<span>Started on:</span>
+												<time
+													datetime={project.data.startedOn.toISOString()}
+												>
+													{project.data.startedOn.toLocaleDateString()}
+												</time>
+											</div>
+										</div>
+									</a>
+								</li>
+							);
+						})
+					}
+				</ul>
 			</div>
 		</div>
 	</section>
@@ -437,6 +486,79 @@ const transformedMainImage = await getImage({
 			}
 
 			text-align: left;
+		}
+
+		.latest-projects-list__wrapper {
+			padding-top: 2rem;
+		}
+
+		.latest-projects-list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.latest-projects-list li {
+			width: fit-content;
+		}
+
+		.latest-projects-list__card {
+			background-color: hsl(var(--clr-background));
+
+			figcaption {
+				padding-top: 1rem;
+				padding-bottom: 0.5rem;
+			}
+
+			figcaption,
+			.latest-projects-list__content {
+				padding-inline: 1rem;
+			}
+
+			.latest-projects-list__content {
+				font-weight: 400;
+			}
+
+			.latest-projects-list__desc {
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.latest-projects-list__timeframe {
+				padding-top: 1rem;
+				padding-bottom: 0.5rem;
+
+				color: hsl(var(--clr-muted-foreground));
+			}
+
+			transition-property: transform, box-shadow;
+
+			&:hover {
+				opacity: 1;
+				transform: scale(1.025);
+				--_shadow: 0px 1px 1px hsl(0 0% 0% / 0.1),
+					0px 2px 2px hsl(0 0% 0% / 0.1),
+					0px 4px 4px hsl(0 0% 0% / 0.1),
+					0px 8px 8px hsl(0 0% 0% / 0.1);
+			}
+
+			width: 300px;
+
+			display: inline-flex;
+			flex-direction: column;
+
+			border-radius: var(--radius);
+
+			overflow: hidden;
+
+			--_shadow: 0px 1px 1px hsl(0 0% 0% / 0.1),
+				0px 2px 2px hsl(0 0% 0% / 0.1), 0px 4px 4px hsl(0 0% 0% / 0.1),
+				0px 8px 8px hsl(0 0% 0% / 0.1), 0px 16px 16px hsl(0 0% 0% / 0.1);
 		}
 	</style>
 </Main>

@@ -1,0 +1,65 @@
+---
+import Main from "@/layouts/main.astro";
+import type { GetStaticPaths } from "astro";
+import { getImage } from "astro:assets";
+import { getCollection } from "astro:content";
+
+export const getStaticPaths = (async () => {
+	const portfolioProject = await getCollection("portfolio");
+
+	return portfolioProject.map((project) => ({
+		params: {
+			project: project.slug,
+		},
+		props: { projectInfo: project },
+	}));
+}) satisfies GetStaticPaths;
+
+const { projectInfo } = Astro.props;
+const ogImage = await getImage({
+	src: projectInfo.data.videoBanner,
+	width: 1200,
+	height: 630,
+	format: "webp",
+});
+const twitterImage = await getImage({
+	src: projectInfo.data.videoBanner,
+	width: 350,
+	height: 196,
+	format: "webp",
+});
+---
+
+<Main
+	title={projectInfo.data.title}
+	description={projectInfo.data.description}
+	og={{
+		title: projectInfo.data.title,
+		description: projectInfo.data.description,
+		image: {
+			url: Astro.url.origin + ogImage.src,
+			alt: projectInfo.data.title,
+			width: ogImage.options.width!,
+			height: ogImage.options.height!,
+			type: ogImage.options.type,
+		},
+	}}
+	twitter={{
+		title: projectInfo.data.title,
+		description: projectInfo.data.description,
+		image: {
+			url: Astro.url.origin + twitterImage.src,
+			alt: projectInfo.data.title,
+			width: twitterImage.options.width!,
+			height: twitterImage.options.height!,
+			type: twitterImage.options.type,
+		},
+		card: "player",
+		player: {
+			url: Astro.url.origin + projectInfo.data.video,
+			width: 1280,
+			height: 720,
+		},
+	}}
+	canonicalUrl={Astro.url.toString()}
+/>

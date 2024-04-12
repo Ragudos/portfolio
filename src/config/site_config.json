@@ -31,21 +31,20 @@
 				"description": "I was not aware of the world of software development until I made a website for my school project. The challenges made me want to learn more about technology, specifically, web development. Thus, I started learning HTML5, CSS3, and Javascript on my own."
 			},
 			"skills": {
-				"title": "Technologies I have used and learned",
+				"title": "What I know",
 				"description": "A list of technologies I have learned and used in my projects. All of these are either me knowing the fundamentals or have built a project with them."
 			},
 			"workExperience": {
-				"title": "My work experience",
+				"title": "Work experience",
 				"description": "A timeline of my experience in the professional world."
 			},
 			"latestProjects": {
-				"title": "A preview of my latest projects",
+				"title": "Latest projects",
 				"description": "A preview of my latest projects. Click them to see more details about the process and intricacies."
 			}
 		}
 	},
 	"workExperience": [],
-	"latestProjects": [],
 	"skills": [
 		{
 			"icon": "devicon-html5-plain colored",
